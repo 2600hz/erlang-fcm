@@ -7,7 +7,7 @@ DEPS = lager jsx google_oauth
 
 dep_lager = git https://github.com/erlang-lager/lager 3.8.1
 dep_jsx = git https://github.com/talentdeficit/jsx.git v3.0.0
-dep_google_oauth = git https://github.com/2600hz/erlang-google-oauth 1.0.0
+dep_google_oauth = git https://github.com/2600hz/erlang-google-oauth 10feca7aa326fd6158ec9824012acf72f9b34aa5
 
 include erlang.mk
 

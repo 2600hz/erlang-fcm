@@ -8,6 +8,7 @@
 
 -export([start_pool_with_api_key/2,
          start_pool_with_json_service_file/2,
+         start_pool_with_json_service_file_bin/2,
          stop/1]).
 
 -export([start_link/2]).
@@ -24,6 +25,10 @@ start_pool_with_api_key(Name, ApiKey) ->
 -spec start_pool_with_json_service_file(atom(), string()) -> {ok, pid()}.
 start_pool_with_json_service_file(Name, FilePath) ->
     fcm_sup:start_child(Name, #{service_file => FilePath}).
+
+-spec start_pool_with_json_service_file_bin(atom(), binary()) -> {ok, pid()}.
+start_pool_with_json_service_file_bin(Name, Bin) ->
+    fcm_sup:start_child(Name, #{service_file_bin => Bin}).
 
 -spec stop(atom()) -> ok.
 stop(Name) ->

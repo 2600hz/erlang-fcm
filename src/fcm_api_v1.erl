@@ -63,10 +63,12 @@ do_push(RegId, Message0, AuthKey, PushUrl) ->
     end.
 
 reload_access_token(#{service_file := ServiceFile} = State) ->
-    cancel_timer(State),
     {ok, Bin} = file:read_file(ServiceFile),
-    #{project_id := ProjectId} = jsx:decode(Bin, ?JSX_OPTS),
-    {ok, #{access_token := AccessToken}} = google_oauth:get_access_token(ServiceFile, ?SCOPE),
+    reload_access_token(State#{service_file_bin => Bin});
+reload_access_token(#{service_file_bin := ServiceFileBin} = State) ->
+    cancel_timer(State),
+    #{project_id := ProjectId} = jsx:decode(ServiceFileBin, ?JSX_OPTS),
+    {ok, #{access_token := AccessToken}} = google_oauth:get_access_token({bin, ServiceFileBin}, ?SCOPE),
     AuthorizationBearer = <<"Bearer ", AccessToken/binary>>,
     PushUrl = iolist_to_binary(["https://fcm.googleapis.com/v1/projects/", ProjectId ,"/messages:send"]),
     State#{
