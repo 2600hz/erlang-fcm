@@ -64,7 +64,7 @@ do_push(RegId, Message0, AuthKey, PushUrl) ->
 
 reload_access_token(#{service_file := ServiceFile} = State) ->
     {ok, Bin} = file:read_file(ServiceFile),
-    reload_access_token(State#{service_file_bin => Bin});
+    reload_access_token(maps:remove(service_file, State#{service_file_bin => Bin}));
 reload_access_token(#{service_file_bin := ServiceFileBin} = State) ->
     cancel_timer(State),
     ServiceJson = #{project_id := ProjectId} = jsx:decode(ServiceFileBin, ?JSX_OPTS),
