@@ -49,10 +49,12 @@ do_push(RegId, Message0, AuthKey, PushUrl) ->
     MapBody = append_token(Message0, RegId),
     Body = jsx:encode(MapBody),
     Request = {PushUrl, [{"Authorization", AuthKey}], "application/json; UTF-8", Body},
+    ?INFO_MSG("Sending request: ~p.~n", [Request]),
     case httpc:request(post, Request, ?HTTP_OPTS, ?REQ_OPTS) of
         {ok, {200, Result}} ->
             #{name := Name} = jsx:decode(Result, ?JSX_OPTS),
             MsgId = lists:last(binary:split(Name, <<"/">>, [global, trim_all])),
+            ?INFO_MSG("Got reply from fcm api: ~p.~n", [Result]),
             {ok, MsgId};
         {ok, {401, _}} ->
             {error, refresh_token};
